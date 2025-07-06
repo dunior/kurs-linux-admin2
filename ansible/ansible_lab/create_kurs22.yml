@@ -1,0 +1,8 @@
+# Playbook tworzy konto usera, hasło nalezy wygenerowac skryptem 
+# ./user_password_hash.sh
+# i zapisać w pliku roli: roles/user_kurs22/tasks/main.yml 
+- hosts: all
+  become: yes
+  roles:
+    - user_kurs22
+

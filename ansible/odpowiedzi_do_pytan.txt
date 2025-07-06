@@ -1,0 +1,95 @@
+1. Czym różni się import_playbook od include_tasks w Ansible?
+
+✅ Odpowiedź:
+
+    import_playbook – importuje cały playbook (np. inny plik .yml) w momencie parsowania, używany w playbookach głównych typu site.yml.
+
+    include_tasks – dynamicznie włącza listę zadań (tasks) w czasie wykonywania (runtime) i może korzystać z warunków when.
+
+2. Jakie są różnice między rolą a zwykłym playbookiem?
+
+✅ Odpowiedź:
+
+    Rola (role) posiada ustaloną strukturę katalogów (tasks, handlers, templates, files, vars, defaults, meta) i jest modularna, przeznaczona do wielokrotnego użycia w różnych playbookach.
+
+    Playbook to lista działań (tasks), która może wykorzystywać role lub definiować zadania bezpośrednio.
+
+
+3. Dlaczego warto używać Ansible Vault?
+
+✅ Odpowiedź:
+Ponieważ Vault umożliwia bezpieczne przechowywanie danych wrażliwych (np. hasła, klucze API) w plikach YAML w zaszyfrowanej formie, aby nie trzymać ich w postaci jawnej w repozytorium.
+
+4. Jak ustawić użytkownikowi w Ansible możliwość sudo bez hasła?
+
+✅ Odpowiedź:
+Przez utworzenie pliku w /etc/sudoers.d/ z wpisem:
+username ALL=(ALL) NOPASSWD:ALL
+
+W Ansible:
+- name: Dodanie użytkownika do sudoers bez hasła
+  copy:
+    dest: /etc/sudoers.d/username
+    content: "username ALL=(ALL) NOPASSWD:ALL\n"
+    mode: '0440'
+
+
+5. Jak dodać warunkowe wykonywanie taska w zależności od systemu operacyjnego?
+
+✅ Odpowiedź:
+Używając when oraz faktów ansible_os_family lub ansible_distribution:
+
+- name: Instalacja pakietu dla Debiana
+  apt:
+    name: package
+    state: present
+  when: ansible_os_family == "Debian"
+
+
+ 6. Jak wyświetlić zawartość vaulta bez edycji pliku?
+
+✅ Odpowiedź:
+Używając polecenia:
+ansible-vault view group_vars/vault.yml
+
+
+7. Czym różni się state: present od state: latest w module package?
+✅ Odpowiedź:
+
+    state: present – zapewnia, że pakiet jest zainstalowany w dowolnej wersji.
+
+    state: latest – zapewnia, że pakiet jest zainstalowany w najnowszej dostępnej wersji (aktualizuje jeśli istnieje nowsza).
+
+
+8. Dlaczego dobrym zwyczajem jest używanie become: yes zamiast wykonywania wszystkiego jako root bezpośrednio?
+
+✅ Odpowiedź:
+Ze względów bezpieczeństwa i zgodności z polityką least privilege, umożliwia wykonywanie zadań z uprawnieniami root tylko wtedy, gdy jest to wymagane, a na co dzień używać konta użytkownika.
+
+
+9. Jak ustawić inventory, aby korzystało z dynamicznego źródła np. z chmury?
+
+✅ Odpowiedź:
+Poprzez:
+
+    Skonfigurowanie dynamic inventory plugin (np. aws_ec2.yaml, azure_rm.yaml) w katalogu projektu.
+
+    Dodanie w ansible.cfg:
+[inventory]
+enable_plugins = aws_ec2, yaml, ini
+
+
+Wywołanie playbooka z dynamicznym inventory:
+ansible-playbook -i aws_ec2.yaml playbook.yml
+
+
+ 10. W jaki sposób przechowywać role, aby były współdzielone w zespole i wersjonowane?
+
+✅ Odpowiedź:
+Najlepiej poprzez:
+
+    Umieszczenie ról w osobnym repozytorium Git i dołączanie przez requirements.yml + ansible-galaxy install -r requirements.yml
+
+    Alternatywnie, trzymać w podkatalogu roles/ w głównym repozytorium Ansible wraz z playbookami i inventory.
+
+

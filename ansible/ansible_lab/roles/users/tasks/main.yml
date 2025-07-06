@@ -1,0 +1,20 @@
+- name: Tworzenie użytkownika pracownik1
+  user:
+    name: pracownik1
+    password: "{{ pracownik1_password | password_hash('sha512') }}"
+    shell: /bin/bash
+    state: present
+
+- name: Tworzenie użytkownika admin2
+  user:
+    name: admin2
+    password: "{{ admin2_password | password_hash('sha512') }}"
+    shell: /bin/bash
+    state: present
+
+- name: Dodanie admin2 do sudoers bez hasła
+  copy:
+    dest: /etc/sudoers.d/admin2
+    content: "admin2 ALL=(ALL) NOPASSWD:ALL\n"
+    mode: '0440'
+

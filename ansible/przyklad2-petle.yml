@@ -1,0 +1,15 @@
+- hosts: all
+  remote_user: root
+  tasks:
+
+    - name: Utworzenie użytkowników
+      user:
+        name: "{{ item }}"
+        state: present
+        groups: wheel
+        shell: /bin/bash
+        home: "/home/{{ item }}"
+      loop:
+        - jan.kowalski
+        - andrzej.nowak
+

@@ -1,0 +1,17 @@
+- name: Tworzenie katalogu /home/kurs
+  file:
+    path: /home/kurs22
+    state: directory
+    owner: kurs22
+    group: kurs22
+    mode: '0755'
+
+- name: Tworzenie użytkownika kurs22
+  user:
+    name: kurs22
+    password: "{{ user_password_hash }}"
+    home: /home/kurs
+    shell: /bin/bash
+    state: present
+    create_home: no
+

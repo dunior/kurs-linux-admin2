@@ -1,0 +1,12 @@
+[webservers]
+web01 ansible_host=IP_WEB01 ansible_user=root
+web02 ansible_host=IP_WEB02 ansible_user=root
+web03 ansible_host=IP_WEB03 ansible_user=root
+
+[dbservers]
+db1 ansible_host=IP_DB1 ansible_user=root
+db2 ansible_host=IP_DB2 ansible_user=root
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+

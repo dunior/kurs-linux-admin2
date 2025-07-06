@@ -1,0 +1,71 @@
+Tabela sekcji i opcji ansible.cfg
+Sekcja	Opcja	Opis
+[defaults]	inventory	Ścieżka do inventory (domyślnie /etc/ansible/hosts)
+	remote_user	Domyślny użytkownik SSH
+	ask_pass	Czy pytać o hasło SSH
+	private_key_file	Ścieżka do klucza prywatnego SSH
+	host_key_checking	Sprawdzanie kluczy hostów
+	timeout	Timeout połączenia SSH
+	forks	Liczba równoległych procesów
+	become	Czy używać sudo/become domyślnie
+	become_user	Na jakiego użytkownika przełączać się become
+	become_method	Metoda become (sudo, su)
+	become_ask_pass	Czy pytać o hasło do become
+	roles_path	Ścieżka do ról
+	library	Ścieżka do dodatkowych modułów
+	module_utils	Ścieżka do modułów pomocniczych
+	vars_plugins	Plugins do zmiennych
+	callback_plugins	Plugins do callbacków
+	action_plugins	Plugins do akcji
+	filter_plugins	Plugins do filtrów Jinja2
+	lookup_plugins	Plugins do lookupów
+	stdout_callback	Format wyjścia (default, yaml, json, minimal)
+	log_path	Ścieżka do logów
+	nocows	Wyłącza ASCII cow (motd)
+	deprecation_warnings	Ostrzeżenia o przestarzałych opcjach
+	command_warnings	Ostrzeżenia o użyciu shell/command
+	retry_files_enabled	Czy generować pliki retry
+	retry_files_save_path	Ścieżka do retry files
+	forks	Liczba jednoczesnych zadań
+	gathering	smart, explicit, implicit (faktów)
+	fact_caching	Typ cache faktów
+	fact_caching_connection	Ścieżka lub dane połączenia cache
+	fact_caching_timeout	Timeout dla cache faktów
+	interpreter_python	Domyślny interpreter Pythona na targetach
+[privilege_escalation]	become	Jak wyżej (czy używać sudo)
+	become_method	Jak wyżej
+	become_user	Jak wyżej
+	become_ask_pass	Jak wyżej
+[ssh_connection]	ssh_args	Dodatkowe argumenty do ssh
+	control_path	Ścieżka dla ControlPath
+	control_path_dir	Katalog ControlPath
+	sftp_batch_mode	Czy używać batch mode w sftp
+	scp_if_ssh	Czy fallbackować do scp
+	pipelining	Czy używać pipelining
+	ssh_transfer_method	sftp/scp/auto
+	retries	Ilość prób reconnectu
+[paramiko_connection]	record_host_keys	Czy zapisywać klucze hostów
+	look_for_keys	Szukać kluczy SSH w ~/.ssh
+	host_key_auto_add	Automatyczne akceptowanie kluczy
+[accelerate]	accelerate_port	Port accelerate
+	accelerate_timeout	Timeout accelerate
+	accelerate_connect_timeout	Timeout połączenia accelerate
+	accelerate_daemon_timeout	Timeout demona accelerate
+	accelerate_multi_key	Czy multi key w accelerate
+[selinux]	policy	Typ polityki SELinux
+	state	enforcing, permissive, disabled
+[colors]	host_ok	Kolor dla host_ok
+	host_changed	Kolor dla host_changed
+	host_unreachable	Kolor dla unreachable
+	host_failed	Kolor dla failed
+	verbose	Kolor dla verbose
+	skipped	Kolor dla skipped
+	dark	Kolor dla dark
+[diff]	always	Czy zawsze pokazywać diff
+	context	Ilość linii kontekstu w diff
+	whitespace	Ignorować whitespace
+[inventory]	enable_plugins	Lista pluginów inventory
+	ignore_extensions	Rozszerzenia ignorowane
+	cache	Czy cacheować inventory
+	cache_plugin	Jaki plugin cache użyć
+	cache_timeout	Timeout cache inventory

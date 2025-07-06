@@ -1,0 +1,80 @@
+1. Uwaga wstępna – ISPConfig i Ansible
+
+Większość publicznych playbooków do ISPConfig przeprowadza pełną instalację i może modyfikować systemowe pliki konfiguracyjne. Nie ma oficjalnego trybu "install-only-if-not-present" w gotowych rolach. Aby uniknąć nadpisania:
+
+ przed uruchomieniem playbooka należy przejrzeć jego tasks i:
+
+    Ograniczyć je warunkami (np. when) sprawdzającymi, czy ISPConfig już istnieje.
+
+    Wyłączyć role/tasks wykonujące destrukcyjne zmiany, jeśli serwer jest już używany produkcyjnie.
+
+ 2. Pobranie roli ISPConfig z Ansible Galaxy
+
+Przykład: rola ahnooie.ispconfig3 (starsza, może wymagać adaptacji), lub inne dostępne w Galaxy/GitHub.
+a) Utwórz plik requirements.yml:
+- src: https://github.com/ahnooie/ansible-role-ispconfig3.git
+  scm: git
+  version: master
+  name: ispconfig3
+
+
+b) Pobierz rolę do swojego repozytorium:
+ansible-galaxy install -r requirements.yml --roles-path roles/
+
+
+Dzięki --roles-path roles/ rola zostanie pobrana do Twojego katalogu projektu.
+
+3. Sprawdzenie i modyfikacja roli
+
+ Otwórz roles/ispconfig3/tasks/main.yml i:
+
+    Sprawdź, czy są zadania modyfikujące /etc/ (np. apache2, php, mariadb).
+
+    Dodaj warunki when sprawdzające istnienie ISPConfig:
+when: not ispconfig_installed.stat.exists
+
+
+Przykład taska warunkowego:
+- name: Check if ISPConfig is already installed
+  stat:
+    path: /usr/local/ispconfig
+  register: ispconfig_installed
+
+
+4. Przygotowanie playbooka do instalacji na web02
+
+Plik install_ispconfig.yml:
+
+- hosts: web02
+  become: yes
+  vars:
+    # przykładowe zmienne roli, dostosuj do Twojej roli
+    ispconfig_admin_password: "StrongPasswordHere"
+  roles:
+    - ispconfig3
+
+
+5. Uruchomienie playbooka
+ansible-playbook -i inventory install_ispconfig.yml
+
+
+Jeśli Twoja rola lub playbook wymaga haseł zaszyfrowanych w vault, pamiętaj o --ask-vault-pass.
+
+
+6. Podsumowanie kroków
+
+    Utwórz requirements.yml z definicją roli ISPConfig.
+
+    Pobierz rolę do swojego repozytorium szkoleniowego za pomocą ansible-galaxy install.
+
+    Sprawdź i zmodyfikuj tasks roli, aby nie nadpisywały istniejącej konfiguracji (użyj stat + when).
+
+    Stwórz playbook install_ispconfig.yml uruchamiający rolę na web02.
+
+    Uruchom playbook i monitoruj przebieg instalacji.
+
+7. Ważne uwagi produkcyjne
+
+ISPConfig mocno ingeruje w system (Apache, PHP, MySQL, Postfix, Dovecot, Bind).
+Instalacja na serwerze z istniejącymi konfiguracjami www/db/poczty może spowodować konflikty.
+Rekomendacja: do ćwiczeń i testów używaj świeżego Rocky Linux / Debian bez innych usług www/db/poczty.

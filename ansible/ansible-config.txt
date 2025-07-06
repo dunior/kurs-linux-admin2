@@ -1,0 +1,9 @@
+generowanie pełnego pliku konfiguracyjnego
+ansible-config init --disabled > ansible.cfg
+
+
+pełna lista z opisami
+ansible-config list
+
+Dokumentacja oficjalna z aktualną listą:
+https://docs.ansible.com/ansible/latest/reference_appendices/config.html

@@ -1,0 +1,9 @@
+- hosts: all
+  remote_user: root
+  tasks:
+
+    - name: Instalacja pakietu httpd (Apache)
+      yum:
+        name: httpd
+        state: present
+

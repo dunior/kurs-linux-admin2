@@ -1,0 +1,21 @@
+Pytania kontrolne do kursu
+
+    Czym różni się import_playbook od include_tasks w Ansible?
+
+    Jakie są różnice między rolą a zwykłym playbookiem?
+
+    Dlaczego warto używać Ansible Vault?
+
+    Jak ustawić użytkownikowi w Ansible możliwość sudo bez hasła?
+
+    Jak dodać warunkowe wykonywanie taska w zależności od systemu operacyjnego?
+
+    Jak wyświetlić zawartość vaulta bez edycji pliku?
+
+    Czym różni się state: present od state: latest w module package?
+
+    Dlaczego dobrym zwyczajem jest używanie become: yes zamiast wykonywania wszystkiego jako root bezpośrednio?
+
+    Jak ustawić inwentory, aby korzystało z dynamicznego źródła np. z chmury?
+
+    W jaki sposób przechowywać role, aby były współdzielone w zespole i wersjonowane?

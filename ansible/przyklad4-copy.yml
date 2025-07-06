@@ -1,0 +1,12 @@
+- hosts: all
+  remote_user: root
+  tasks:
+
+    - name: Skopiowanie bashrc
+      copy:
+        src: bashrc
+        dest: /etc/bashrc
+        mode: '0644'
+        owner: root
+        group: root
+

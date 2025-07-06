@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Strona główna {{ domain_name }}</title>
+</head>
+<body>
+    <h1>Witaj na stronie {{ domain_name }}</h1>
+    <p>System operacyjny: {{ ansible_distribution }} {{ ansible_distribution_version }}</p>
+    <p>Hostname: {{ ansible_hostname }}</p>
+    <p>Adres IP: {{ ansible_default_ipv4.address }}</p>
+    <p><a href="dane.html">Dane szczegółowe</a></p>
+</body>
+</html>
+

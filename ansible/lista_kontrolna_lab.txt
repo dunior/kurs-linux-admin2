@@ -1,0 +1,37 @@
+Lista kontrolna lab
+
+1. Struktura katalogów
+
+Utwórz katalog ansible_lab i podkatalogi wg diagramu
+
+Stwórz pliki inventory, update.yml, install_apache.yml, install_mariadb.yml, create_users.yml, create_backup_dir.yml
+
+    Utwórz katalogi group_vars, host_vars, roles
+
+2. Vault
+
+Utwórz plik group_vars/vault.yml za pomocą ansible-vault create
+
+    Zapisz w nim zaszyfrowane hasła dla pracownik1 i admin2
+
+3. Role
+
+W roli apache utwórz zadania instalacji i uruchomienia usługi
+
+W roli mariadb utwórz zadania instalacji i uruchomienia usługi
+
+W roli users utwórz użytkowników z hasłami z vault, dodaj admin2 do sudoers
+
+    W roli common utwórz katalog /backup
+
+4. Playbooki
+
+Stwórz update.yml aktualizujący wszystkie systemy
+
+    Stwórz site.yml importujący wszystkie playbooki w jednym wywołaniu
+
+5. Testy
+
+Przetestuj każdy playbook osobno (ansible-playbook -i inventory playbook.yml)
+
+Przetestuj site.yml w całości

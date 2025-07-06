@@ -1,0 +1,29 @@
+ansible_project:
+  - production
+  - staging
+  - group_vars:
+      - dbservers.yml
+      - webservers.yml
+  - host_vars:
+      - h1.yml
+      - db1.yml
+  - site.yml
+  - webservers.yml
+  - dbservers.yml
+  - roles:
+      - httpd:
+          - tasks:
+              - main.yml
+          - handlers:
+              - main.yml
+          - files:
+              - httpd.conf.j2
+          - templates:
+              - ssl.tar.gz
+              - script.sh
+          - vars:
+              - main.yml
+          - defaults: []
+          - meta:
+              - main.yml
+

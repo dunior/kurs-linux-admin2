@@ -1,0 +1,125 @@
+- hosts: all
+  become: yes
+  vars:
+    domain_name: lab.alx.local
+    web_root: /var/www/lab.alx.local
+
+  tasks:
+
+    - name: Sprawdzenie systemu operacyjnego
+      debug:
+        msg: "Instalacja Apache na {{ ansible_distribution }} {{ ansible_distribution_major_version }}"
+
+    - name: Sprawdzenie czy Apache jest już zainstalowany
+      package_facts:
+
+    - name: Instalacja Apache na Rocky Linux 9
+      yum:
+        name: httpd
+        state: latest
+      when:
+        - ansible_distribution == "Rocky"
+        - ansible_distribution_major_version == "9"
+        - "'httpd' not in ansible_facts.packages"
+
+    - name: Instalacja Apache na Debian 12
+      apt:
+        name: apache2
+        state: latest
+        update_cache: yes
+      when:
+        - ansible_distribution == "Debian"
+        - ansible_distribution_major_version == "12"
+        - "'apache2' not in ansible_facts.packages"
+
+    - name: Utworzenie katalogu dla domeny
+      file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: apache
+        group: apache
+        mode: '0755'
+      when: ansible_distribution == "Rocky"
+
+    - name: Utworzenie katalogu dla domeny (Debian)
+      file:
+        path: "{{ web_root }}"
+        state: directory
+        owner: www-data
+        group: www-data
+        mode: '0755'
+      when: ansible_distribution == "Debian"
+
+    - name: Skopiowanie index.html
+      template:
+        src: index.html.j2
+        dest: "{{ web_root }}/index.html"
+        owner: apache
+        group: apache
+        mode: '0644'
+      when: ansible_distribution == "Rocky"
+
+    - name: Skopiowanie index.html (Debian)
+      template:
+        src: index.html.j2
+        dest: "{{ web_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      when: ansible_distribution == "Debian"
+
+    - name: Skopiowanie dane.html
+      template:
+        src: dane.html.j2
+        dest: "{{ web_root }}/dane.html"
+        owner: apache
+        group: apache
+        mode: '0644'
+      when: ansible_distribution == "Rocky"
+
+    - name: Skopiowanie dane.html (Debian)
+      template:
+        src: dane.html.j2
+        dest: "{{ web_root }}/dane.html"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+      when: ansible_distribution == "Debian"
+
+    - name: Konfiguracja vhost Apache (Rocky)
+      copy:
+        dest: /etc/httpd/conf.d/lab.alx.local.conf
+        content: |
+          <VirtualHost *:80>
+              ServerName {{ domain_name }}
+              DocumentRoot {{ web_root }}
+          </VirtualHost>
+      notify: restart apache
+      when: ansible_distribution == "Rocky"
+
+    - name: Konfiguracja vhost Apache (Debian)
+      copy:
+        dest: /etc/apache2/sites-available/lab.alx.local.conf
+        content: |
+          <VirtualHost *:80>
+              ServerName {{ domain_name }}
+              DocumentRoot {{ web_root }}
+          </VirtualHost>
+      notify: enable site debian
+      when: ansible_distribution == "Debian"
+
+  handlers:
+    - name: restart apache
+      service:
+        name: httpd
+        state: restarted
+
+    - name: enable site debian
+      command: a2ensite lab.alx.local.conf
+      notify: restart apache2
+
+    - name: restart apache2
+      service:
+        name: apache2
+        state: restarted
+

@@ -1,0 +1,26 @@
+- name: Instalacja MariaDB
+  apt:
+    name: mariadb-server
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Instalacja MariaDB na Rocky
+  yum:
+    name: mariadb-server
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Uruchomienie i włączenie MariaDB
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+  when: ansible_os_family == "Debian"
+
+- name: Uruchomienie i włączenie MariaDB (Rocky)
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
+  when: ansible_os_family == "RedHat"
+

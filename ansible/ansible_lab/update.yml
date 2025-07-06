@@ -1,0 +1,8 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Aktualizacja wszystkich pakietów
+      package:
+        name: "*"
+        state: latest
+

@@ -1,0 +1,63 @@
+# ANSIBLE
+
+
+## instalcja ansible
+
+RedHat
+sudo dnf install epel-release -y
+sudo dnf install ansible -y
+
+
+Debian
+sudo apt update
+sudo apt install ansible -y
+
+Weryfikacja
+ansible --version
+
+
+## Wymagania na maszynach, którymi zarządzasz (managed nodes)
+
+- Minimalne wymagania:
+
+    System operacyjny: Linux, macOS, Unix lub Windows (z WinRM). Najczęściej Linux.
+
+    Python: zazwyczaj wbudowany (np. /usr/bin/python lub /usr/bin/python3). Minimalna wersja to Python 2.7 lub 3.5+.
+
+- Pakiety wymagane:
+
+    Python (2 lub 3) + minimalny zestaw modułów (standardowe w większości dystrybucji)
+
+    SSH server (sshd) uruchomiony, aby Ansible mogło się połączyć
+
+- Co NIE jest wymagane:
+
+    Brak instalacji Ansible na hostach docelowych. Wystarczy Python i SSH.
+
+## Dostęp SSH (najczęściej przez klucze)
+
+- Aby Ansible mogło działać:
+
+    Zdefiniuj klucz publiczny w ~/.ssh/authorized_keys na hostach docelowych.
+
+    Zweryfikuj połączenie:
+
+ssh user@target_host
+
+## Konfiguracja podstawowego inventory
+
+Przykład pliku hosts (inventory):
+
+[webservers]
+192.168.1.10
+192.168.1.11
+
+[dbservers]
+192.168.1.20
+
+
+## Test połączenia Ansible
+
+ansible all -m ping -i hosts -u nazwa_uzytkownika
+
+

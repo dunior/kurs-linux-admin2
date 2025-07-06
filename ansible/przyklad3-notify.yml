@@ -1,0 +1,17 @@
+- hosts: all
+  remote_user: root
+
+  handlers:
+    - name: zrestartuj apache
+      service:
+        name: httpd
+        state: restarted
+
+  tasks:
+    - name: instalacja pakietu httpd (apache)
+      yum:
+        name: httpd
+        state: latest
+      notify:
+        - zrestartuj apache
+

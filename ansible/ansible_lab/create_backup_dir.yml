@@ -1,0 +1,8 @@
+- name: Utworzenie katalogu /backup
+  file:
+    path: /backup
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
