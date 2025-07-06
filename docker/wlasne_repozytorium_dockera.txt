@@ -1,0 +1,82 @@
+Jak skonfigurować Dockera do pobierania obrazów z własnego (prywatnego) repozytorium
+
+Poniżej znajdziesz kompletną instrukcję krok po kroku.
+✅ 1. Rodzaje własnych repozytoriów
+🔹 A. Lokalny registry (np. na Twoim serwerze)
+
+Przykład: registry.mycompany.local:5000
+🔹 B. Prywatny repozytorium w chmurze
+
+Np.:
+
+    Docker Hub (private repository)
+
+    GitHub Container Registry
+
+    GitLab Container Registry
+
+    AWS ECR, GCP Artifact Registry, Azure ACR
+
+🔧 2. Konfiguracja dla prywatnego registry z samopodpisanym certyfikatem
+
+Jeśli Twoje repozytorium ma self-signed cert, musisz dodać wyjątek w konfiguracji Dockera.
+📁 Na kliencie Docker:
+
+    Utwórz katalog konfiguracyjny:
+
+sudo mkdir -p /etc/docker/certs.d/registry.mycompany.local:5000
+
+    Skopiuj tam swój certyfikat CA:
+
+sudo cp myregistry.crt /etc/docker/certs.d/registry.mycompany.local:5000/ca.crt
+
+⚠️ 3. Jeśli korzystasz z rejestru bez HTTPS (testowo)
+
+Dla niezabezpieczonego (insecure) registry, edytuj plik:
+
+    /etc/docker/daemon.json
+
+Dodaj lub zmodyfikuj:
+
+{
+  "insecure-registries": ["registry.mycompany.local:5000"]
+}
+
+Następnie przeładuj Dockera:
+
+sudo systemctl restart docker
+
+🔑 4. Logowanie do repozytorium z autoryzacją
+
+Jeśli Twoje repo wymaga logowania (np. prywatne Docker Hub lub GitHub CR):
+
+docker login registry.mycompany.local:5000
+
+Wprowadź login i hasło (lub token dostępu, jeśli konfigurujesz CI/CD).
+📦 5. Pobieranie obrazów
+
+Po konfiguracji:
+
+docker pull registry.mycompany.local:5000/nazwa_obrazu:tag
+
+Przykład:
+
+docker pull registry.mycompany.local:5000/myapp:latest
+
+🔄 6. Push do własnego registry
+
+Jeśli budujesz własny obraz i chcesz wysłać go do swojego repo:
+
+docker tag myapp:latest registry.mycompany.local:5000/myapp:latest
+docker push registry.mycompany.local:5000/myapp:latest
+
+📝 7. Podsumowanie
+
+✅ Skonfiguruj certyfikat CA lub insecure-registries
+✅ Zaloguj się przez docker login, jeśli wymagana jest autoryzacja
+✅ Używaj pełnej nazwy rejestru w pull i push
+💡 Dodatkowe: uruchomienie własnego lokalnego registry (na testy)
+
+docker run -d -p 5000:5000 --restart=always --name registry registry:2
+
+Później możesz push/pull na adres localhost:5000.

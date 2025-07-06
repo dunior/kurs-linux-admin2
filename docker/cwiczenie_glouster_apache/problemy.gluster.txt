@@ -1,0 +1,46 @@
+#walidator yaml
+
+ https://codebeautify.org/yaml-validator
+
+
+#weryfikacja pakietow w systemie host-a
+ which mount.glusterfs
+
+dnf  install glusterfs-fuse
+
+#weryfikacja sieci
+ping gluster1
+
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' gluster1
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' gluster2
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' gluster3
+
+adresy ip dockerow gluster nalezy dopisac do /etc/hosts
+
+docker exec -it gluster1 bash
+
+#konfiguracja glusterfs
+mkdir -p /data/brick1/gv0
+
+gluster peer probe 172.18.0.3
+gluster peer probe 172.18.0.4
+gluster peer status
+
+
+gluster volume create gv0 replica 3   172.18.0.2:/data/brick1/gv0   172.18.0.3:/data/brick1/gv0   172.18.0.4:/data/brick1/gv0 force
+gluster volume start gv0
+gluster volume info
+
+
+#zapisanie zmian w obrazach dockerow po recznych zmianach
+mkdir myrepo
+
+docker commit gluster1 myrepo/gluster1-configured:latest
+docker commit gluster1 myrepo/gluster2-configured:latest
+docker commit gluster1 myrepo/gluster3-configured:latest
+
+
+#uruchomienie katalogu montowanego przez gustera na hoscie
+mkdir -p /mnt/gv0
+mount -t glusterfs 172.18.0.2:/gv0 /mnt/gv0
+

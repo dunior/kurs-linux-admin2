@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+
+  gluster1:
+    image: gluster/gluster-centos
+    container_name: gluster1
+    hostname: gluster1
+    privileged: true
+    command: glusterd -N
+    networks:
+      glusternet:
+        ipv4_address: 172.18.0.2
+    ports:
+      - "24007:24007"
+      - "24008:24008"
+      - "49152-49251:49152-49251"
+
+  gluster2:
+    image: gluster/gluster-centos
+    container_name: gluster2
+    hostname: gluster2
+    privileged: true
+    command: glusterd -N
+    networks:
+      glusternet:
+        ipv4_address: 172.18.0.3
+    # Ports removed to avoid conflict with gluster1
+
+  gluster3:
+    image: gluster/gluster-centos
+    container_name: gluster3
+    hostname: gluster3
+    privileged: true
+    command: glusterd -N
+    networks:
+      glusternet:
+        ipv4_address: 172.18.0.4
+    # Ports removed to avoid conflict with gluster1
+
+  apache1:
+    build: ./apache
+    container_name: apache1
+    hostname: apache1
+    ports:
+      - "8081:80"
+    depends_on:
+      - gluster1
+      - gluster2
+      - gluster3
+    networks:
+      - glusternet
+    volumes:
+      - /mnt/gv0:/mnt/glusterfs
+
+  apache2:
+    build: ./apache
+    container_name: apache2
+    hostname: apache2
+    ports:
+      - "8082:80"
+    depends_on:
+      - gluster1
+      - gluster2
+      - gluster3
+    networks:
+      - glusternet
+    volumes:
+      - /mnt/gv0:/mnt/glusterfs
+
+networks:
+  glusternet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+

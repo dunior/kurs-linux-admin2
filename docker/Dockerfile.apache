@@ -1,0 +1,49 @@
+# Pobierz obraz bazowy
+FROM ubuntu:22.04
+
+# Autor i opis obrazu
+LABEL maintainer="admin@example.com" \
+      description="Przykładowy obraz Ubuntu z Apache" \
+      version="1.0"
+
+# Zmienna środowiskowa
+ENV APACHE_LOG_DIR=/var/log/apache2
+
+# Utwórz katalog roboczy
+WORKDIR /var/www/html
+
+# Zainstaluj Apache i wyczyść cache
+RUN apt-get update && \
+    apt-get install -y apache2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Skopiuj plik index.html z lokalnego katalogu do kontenera
+COPY index.html /var/www/html/index.html
+
+# Dodaj plik konfiguracyjny (ADD rozpakowuje archiwa i obsługuje URL)
+ADD config.tar.gz /etc/apache2/
+
+# Otwórz port 80
+EXPOSE 80
+
+# Utwórz punkt montowania wolumenu
+VOLUME ["/var/www/html"]
+
+# Utwórz użytkownika do uruchamiania procesów
+RUN useradd -ms /bin/bash www
+
+# Zmień użytkownika na www
+USER www
+
+# Komenda domyślna (może być nadpisana przy docker run)
+CMD ["apachectl", "-D", "FOREGROUND"]
+
+# ENTRYPOINT + CMD = pełna komenda
+# ENTRYPOINT ustawia główny proces kontenera
+ENTRYPOINT ["/usr/sbin/apache2ctl"]
+
+# HEALTHCHECK sprawdza zdrowie kontenera
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1
+

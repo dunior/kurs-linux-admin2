@@ -1,0 +1,70 @@
+Co robi to polecenie: docker search --filter=stars=3 fedora
+
+    docker search fedora
+    Przeszukuje Docker Hub (domyślne publiczne repozytorium obrazów) w poszukiwaniu obrazów, których nazwa lub opis zawiera słowo „fedora”.
+
+    --filter=stars=3
+    Ogranicza wyniki wyszukiwania do obrazów, które mają co najmniej 3 gwiazdki (stars) od społeczności.
+
+Szczegóły składni:
+
+    docker search
+    Podpolecenie Dockera do przeszukiwania zarejestrowanych obrazów.
+
+    --filter=stars=3
+    Filtr wyników wg liczby przyznanych gwiazdek (popularności, jakości, zaufania).
+    Można używać także:
+
+        --filter=stars=5 (dokładnie 5 gwiazdek)
+
+        --filter=stars>=10 (więcej lub równe 10 gwiazdek)
+
+    fedora
+    Wzorzec wyszukiwania – w tym wypadku obrazy powiązane z Fedorą.
+
+
+
+Wyjaśnienie – docker pull fedora/ssh z wyborem wersji
+
+docker pull fedora/ssh
+
+Pobiera obraz z Docker Hub o nazwie fedora/ssh, używając domyślnego taga (zwykle latest, jeśli nie podano innego).
+ Jak wybrać konkretną wersję?
+
+Obrazy Dockera mogą mieć wiele tagów, np.:
+
+    różne wersje systemu Fedora (38, 39, rawhide)
+
+    różne wersje lub konfiguracje ssh (jeśli są publikowane jako osobne tagi)
+
+ Składnia ogólna:
+
+docker pull fedora/ssh:<tag>
+
+Na przykład:
+
+docker pull fedora/ssh:39
+
+lub
+
+docker pull fedora/ssh:38-openssh8.9
+
+ Jak sprawdzić dostępne tagi?
+
+    Przez przeglądarkę
+    Wejdź na: https://hub.docker.com/r/fedora/ssh/tags
+
+    Przez CLI (przykład dla oficjalnej Fedory):
+
+docker search fedora
+
+ Uwaga: docker search nie pokazuje tagów – pokazuje tylko repozytoria. Tagi trzeba sprawdzać na Docker Hub.
+
+    Przykładowe tagi (jeśli istnieją):
+
+fedora/ssh:39
+fedora/ssh:38
+fedora/ssh:39-openssh9.0
+
+
+`

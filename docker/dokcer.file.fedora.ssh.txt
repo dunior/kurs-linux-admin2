@@ -1,0 +1,22 @@
+Jeśli chcesz inną wersję SSH na Fedorze
+
+Obraz fedora/ssh zawiera zwykle preinstalowaną wersję SSH typową dla danej wersji Fedory.
+Jeśli potrzebujesz:
+
+✅ innej wersji Fedory – wybierz odpowiedni tag
+✅ innej wersji SSH – najlepiej zbuduj własny obraz na bazie Fedora z SSH w wersji, której potrzebujesz.
+🔧 Przykładowy Dockerfile:
+
+FROM fedora:39
+
+RUN dnf install -y openssh-server && \
+    dnf clean all
+
+# (opcjonalna konfiguracja SSH)
+RUN ssh-keygen -A
+
+CMD ["/usr/sbin/sshd", "-D"]
+
+Uruchom:
+
+docker build -t myfedora:ssh-39-openssh9.3 .
