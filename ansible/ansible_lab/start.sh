@@ -12,3 +12,19 @@ ansible-playbook -i inventory site.yml --ask-vault-pass
 
 
 nsible-playbook -i inventory install_apache2.yml
+
+#przyklad wywolania z limitami:
+ansible-playbook -i inventory install_apache.yml \
+  -l web* \
+  -u deploy \
+  -e ansible_become_user=root
+
+  #identyczny przyklad z dlugimi przelacznikami
+
+  ansible-playbook -i inventory install_apache.yml \
+  --limit "web*" \
+  -u deploy \
+  -e ansible_become_user=root
+
+  # instalacja z limitem na grupie hostow
+  ansible-playbook -i install_apache.yml -l "host1,host2" -e "grupa=host1,host2"
