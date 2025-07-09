@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: "{{ grupa }}"
   become: yes
   tasks:
     - name: Aktualizacja wszystkich pakietów
